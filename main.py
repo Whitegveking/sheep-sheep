@@ -504,7 +504,7 @@ class MainWindow(QWidget):
         :return:
         """
         self.game.move_up_cubes()
-        self.game.top_cubes = self.get_top_cubes()
+        self.game.top_cubes = self.game.get_top_cubes()
         self.show_cur_game()
 
     def shuffle_cur_cubes_category(self):
