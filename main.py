@@ -414,12 +414,15 @@ class MainWindow(QWidget):
         self.shuffle_button = QPushButton()
         self.restart_button = QPushButton()
 
+        # 初始化当前难度
+        self.current_difficulty = difficulty
+
         self.init_game_region()
         self.init_pic_box()
         self.init_button_region()
 
         self.game = None
-        self.restart_game(difficulty)
+        self.restart_game(self.current_difficulty)
 
     def init_button_region(self):
         """
@@ -465,18 +468,22 @@ class MainWindow(QWidget):
         self.restart_button.clicked.connect(self.restart_game)
         self.restart_button.setText('重启')
 
-    def restart_game(self, difficulty='medium'):
+    def restart_game(self, difficulty=None):
         """
         重启游戏，重置计时器和时间
-        :param difficulty: 游戏难度
+        :param difficulty: 游戏难度（如果未指定，则使用当前难度）
         :return:
         """
+        # 如果未指定新的难度，使用当前难度
+        if difficulty:
+            self.current_difficulty = difficulty
+
         # 重置时间和计时器
         self.time_left = 60  # 重置倒计时时间
         self.timer_label.setText(f"剩余时间: {self.time_left}秒")
         self.timer.start(1000)  # 重新启动计时器
 
-        self.game = Game(difficulty)
+        self.game = Game(self.current_difficulty)
         self.game.random_cubes()
         self.show_cur_game()
 
@@ -600,6 +607,7 @@ class MainWindow(QWidget):
         game_x = x / self.pic_box_width * self.game.width
         game_y = y / self.pic_box_height * self.game.height
         return game_x, game_y
+
 
 class StartWindow(QWidget):
     """
